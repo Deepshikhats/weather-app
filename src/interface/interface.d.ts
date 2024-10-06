@@ -1,4 +1,5 @@
 interface WidgetProps {
+  id: string;
   location: string;
   temperature: number;
   condition:

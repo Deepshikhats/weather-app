@@ -61,7 +61,7 @@ const Widget: React.FC<{
           variant="h4"
           sx={{ textAlign: "center", fontWeight: "bold" }}
         >
-          {data?.temperature.toFixed(2)}°{currentUnit}
+          {data?.temperature?.toFixed(2)}°{currentUnit}
         </Typography>
 
         <Typography

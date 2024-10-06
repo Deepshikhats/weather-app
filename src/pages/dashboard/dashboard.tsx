@@ -14,12 +14,17 @@ import Header from "../../components/header/header";
 import Widget from "../../components/widget/widget";
 import { useDashboardContext } from "../../hooks/useContext";
 import GetWeather from "../../services/services";
-
+import { v4 as uuidv4 } from "uuid";
 const Dashboard = () => {
   /******************************REACT-HOOKS********************************************** */
 
-  const { widgetArray, currentUnit, setCurrentUnit, setWidgetArray } =
-    useDashboardContext();
+  const {
+    widgetArray,
+    currentUnit,
+    lastUpdated,
+    setCurrentUnit,
+    setWidgetArray,
+  } = useDashboardContext();
   const [city, setCity] = useState<string>("");
 
   /******************************SERVICE********************************************** */
@@ -30,12 +35,17 @@ const Dashboard = () => {
       setCity("");
       GetWeather({ city })
         .then(({ name, weather, main }) => {
+          const temp =
+            currentUnit == "f"
+              ? ((Number(main.temp) - 273.15) * 9) / 5 + 32
+              : Number(main.temp) - 273.15;
           setWidgetArray((cv) => [
             ...cv,
             {
+              id: uuidv4(),
               location: name,
               condition: weather?.[0]?.main,
-              temperature: Number(main.temp) - 273.15,
+              temperature: temp,
               iconCode: weather?.[0]?.icon,
             },
           ]);
@@ -122,6 +132,9 @@ const Dashboard = () => {
             </FormControl>
           </Grid2>
         </Grid2>
+        <Box component="span">
+          Last Updated:- {lastUpdated.toLocaleString()}
+        </Box>
 
         <Box
           component="section"
